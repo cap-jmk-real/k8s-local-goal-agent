@@ -1,0 +1,40 @@
+# Starter backlog for majico canvas-worker refactor (copy into majico.xyz)
+meta:
+  plan_path: docs/internal/plans/refactor-canvas-worker-1000lc.md
+  start_ref: cursor/refactor-canvas-worker-1000lc
+  goals_per_session: 1
+  auto_pr: false
+
+constraints:
+  - One focused commit per completed goal
+  - Run verify_commands before commit
+  - Tag commits with [goal:<id>]
+  - No behavior change unless goal explicitly allows it
+
+verification_defaults:
+  typecheck: npm run typecheck
+  test: npm test
+
+goals:
+  - id: c1-inventory-flow-modules
+    title: Inventory studio flow modules over 1000 lines
+    phase: phase-1
+    description: |
+      List all files under app/studio and packages/ exceeding 1000 lines.
+      Write docs/internal/reports/canvas-worker-inventory.md.
+    verify_commands:
+      - test -f docs/internal/reports/canvas-worker-inventory.md
+    acceptance:
+      - Inventory report exists with file paths and line counts
+
+  - id: c2-extract-studio-flow-file
+    title: Extract first oversized studio flow file
+    phase: phase-2
+    description: |
+      Pick the largest flow file from inventory and extract one cohesive submodule.
+    verify_commands:
+      - npm run typecheck
+      - npm test -- --runInBand 2>/dev/null || npm test
+    acceptance:
+      - Target file reduced by at least 200 lines
+      - Tests and typecheck pass

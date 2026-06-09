@@ -1,0 +1,34 @@
+# Majico canvas-worker refactor — consumer config for k8s-local-goal-agent
+# https://github.com/cap-jmk-real/k8s-local-goal-agent
+
+consumer:
+  name: majico-refactor-canvas-worker
+  repo_url: https://github.com/cap-jmk-launchpad/majico.xyz.git
+  start_ref: cursor/refactor-canvas-worker-1000lc
+  namespace: majico-staging
+  worker_name: majico-refactor-goal
+
+goals:
+  mode: yaml
+  plan: docs/internal/plans/refactor-canvas-worker-1000lc.md
+  yaml_path: scripts/agents/goals/refactor-canvas-worker-1000lc.yaml
+  progress_json: scripts/agents/goals/.refactor-progress.json
+
+ollama:
+  url: http://ollama.majico-staging.svc.cluster.local:11434
+  model: qwen3.5:9b
+
+loop:
+  sleep_sec: 120
+  exit_on_complete: true
+  max_goals_per_iteration: 1
+
+# Deploy on blackpearl:
+#   export GOAL_REPO_URL=https://github.com/cap-jmk-launchpad/majico.xyz.git
+#   export GOAL_START_REF=cursor/refactor-canvas-worker-1000lc
+#   export GOAL_PLAN=docs/internal/plans/refactor-canvas-worker-1000lc.md
+#   export GOALS_YAML=scripts/agents/goals/refactor-canvas-worker-1000lc.yaml
+#   export PROGRESS_JSON=scripts/agents/goals/.refactor-progress.json
+#   export K8S_NAMESPACE=majico-staging
+#   export GOAL_WORKER_NAME=majico-refactor-goal
+#   bash scripts/setup-homelab-goal-worker.sh

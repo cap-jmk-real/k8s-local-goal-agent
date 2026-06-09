@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: __WORKER_NAME__
+  namespace: __NAMESPACE__
+  labels:
+    app: __WORKER_NAME__
+    app.kubernetes.io/name: __WORKER_NAME__
+    app.kubernetes.io/component: local-goal-agent
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: __WORKER_NAME__
+  template:
+    metadata:
+      labels:
+        app: __WORKER_NAME__
+        app.kubernetes.io/name: __WORKER_NAME__
+        app.kubernetes.io/component: local-goal-agent
+    spec:
+      containers:
+        - name: goal-worker
+          image: node:22-bookworm
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/bash", "-c"]
+          args:
+            - |
+              set -euo pipefail
+              apt-get update -qq && apt-get install -y -qq git curl jq >/dev/null
+              cp -r /app/scripts /tmp/scripts && chmod +x /tmp/scripts/*.sh
+              export GOAL_AGENTS_ROOT=/tmp
+              export PATH="/tmp/scripts:$PATH"
+              exec /tmp/scripts/local-goal-loop.sh
+          envFrom:
+            - configMapRef:
+                name: __WORKER_NAME__
+          env:
+            - name: GH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: goal-agent-secrets
+                  key: GH_TOKEN
+                  optional: true
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "2"
+              memory: 2Gi
+          volumeMounts:
+            - name: workspace
+              mountPath: /workspace
+            - name: agent-scripts
+              mountPath: /app/scripts
+              readOnly: true
+      volumes:
+        - name: workspace
+          persistentVolumeClaim:
+            claimName: __PVC_NAME__
+        - name: agent-scripts
+          configMap:
+            name: __WORKER_NAME__-scripts
+            defaultMode: 0755

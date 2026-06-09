@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: __WORKER_NAME__
+  namespace: __NAMESPACE__
+  labels:
+    app: __WORKER_NAME__
+    app.kubernetes.io/name: __WORKER_NAME__
+    app.kubernetes.io/component: local-goal-agent
+data:
+  GOAL_REPO_URL: "__REPO_URL__"
+  GOAL_START_REF: "__START_REF__"
+  GOAL_PLAN: "__GOAL_PLAN__"
+  GOALS_YAML: "__GOALS_YAML__"
+  GOAL_SPRINT_MD: "__GOAL_SPRINT_MD__"
+  PROGRESS_JSON: "__PROGRESS_JSON__"
+  OLLAMA_URL: "__OLLAMA_URL__"
+  OLLAMA_MODEL: "__OLLAMA_MODEL__"
+  GOAL_LOOP_SLEEP_SEC: "__LOOP_SLEEP_SEC__"
+  GOAL_EXIT_ON_COMPLETE: "__EXIT_ON_COMPLETE__"
+  GOAL_MAX_PER_ITERATION: "__MAX_PER_ITERATION__"
+  GOAL_REPO_ROOT: "/workspace/repo"
+  GOAL_AGENTS_ROOT: "/app"

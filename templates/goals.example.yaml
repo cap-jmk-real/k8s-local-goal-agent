@@ -1,0 +1,47 @@
+# Goal backlog schema (cursor-goal-loop compatible)
+# Copy to your project as goals.yaml (or set GOALS_YAML env)
+
+meta:
+  plan_path: docs/plans/my-refactor.md
+  start_ref: main
+  goals_per_session: 1
+  auto_pr: false
+
+constraints:
+  - One focused commit per completed goal
+  - Run verify_commands before commit
+  - Tag commits with [goal:<id>] for git-log resume
+
+verification_defaults:
+  unit: npm test
+  typecheck: npm run typecheck
+
+goals:
+  - id: extract-module-a
+    title: Extract module A from monolith
+    phase: phase-1
+    description: |
+      Move module A into its own file. No behavior change.
+    files:
+      - src/module-a.ts
+      - src/index.ts
+    verify_commands:
+      - npm test -- tests/module-a.test.ts
+      - npm run typecheck
+    acceptance:
+      - src/module-a.ts exists
+      - All tests green
+
+  - id: extract-module-b
+    title: Extract module B
+    phase: phase-1
+    description: |
+      Extract module B following the same pattern as module A.
+    files:
+      - src/module-b.ts
+    verify_commands:
+      - npm test
+      - npm run typecheck
+    acceptance:
+      - src/module-b.ts <= 500 lines
+      - No import cycles

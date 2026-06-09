@@ -1,0 +1,30 @@
+# Consumer config for k8s-local-goal-agent
+# Copy to your repo as .goal-worker.yaml or pass as env to setup-homelab-goal-worker.sh
+
+consumer:
+  name: my-project-sprint
+  repo_url: https://github.com/you/your-repo.git
+  start_ref: feature/my-sprint
+  namespace: goal-workers
+  worker_name: my-project-goal
+
+goals:
+  mode: yaml  # yaml | markdown
+  plan: docs/plans/my-plan.md
+  yaml_path: goals.yaml
+  # sprint_md: data/goal-directed-sprints/my-sprint.md  # when mode=markdown
+  progress_json: .goal-progress.json
+
+ollama:
+  url: http://ollama.majico-staging.svc.cluster.local:11434
+  model: qwen3.5:9b
+
+loop:
+  sleep_sec: 120
+  exit_on_complete: true
+  max_goals_per_iteration: 1
+
+secrets:
+  # GH_TOKEN from env or k8s secret goal-agent-secrets
+  gh_token_secret: goal-agent-secrets
+  gh_token_key: GH_TOKEN
