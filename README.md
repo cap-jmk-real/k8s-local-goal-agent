@@ -1,5 +1,7 @@
 # k8s-local-goal-agent
 
+> **Canonical package:** Use [**goal-directed-k8s-worker**](https://github.com/cap-jmk-real/goal-directed-k8s-worker) for new homelab/majico deployments. It follows the li ecosystem pattern (`goal-directed-k8s-loop.sh`, TypeScript `advance-goal.ts`, `local-cursor-sdk` + Ollama backends, watchdog). This repo remains as a simpler bash/Ollama-only variant; majico.xyz submodule and ops docs point at `goal-directed-k8s-worker`.
+
 **Homelab goal-directed agent loop** — offload autonomous implementation to your Kubernetes cluster using **local Ollama/Qwen**, not the Cursor cloud SDK.
 
 Generalized from the [li-langverse homelab pattern](https://gitlab.lilangverse.xyz/li-langverse/li-cursor-agents) (`homelab-goal-directed-k8s-worker` skill) and [majico](https://github.com/cap-jmk-launchpad/majico.xyz) goal YAML backlogs.
